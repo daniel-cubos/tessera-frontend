@@ -6,8 +6,8 @@ import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
-import useValidacaoForm from "../hooks/useValidacaoForm";
-import CircularProgress from "./CircularProgress";
+import useValidacaoForm from "../../hooks/useValidacaoForm";
+import CircularProgress from "../CircularProgress";
 
 const useColorlibStepIconStyles = makeStyles({
   root: {
@@ -183,7 +183,7 @@ export default function Steppers({ titulo, formsPassos, statusCarregamento }) {
             variant="contained"
             onClick={(e) => handleNext(e)}
             className={clsx(classes.button, classes.contained)}
-            >
+          >
             {activeStep >= steps.length ? "Criar conta" : "Próximo"}
           </Button>
         </div>

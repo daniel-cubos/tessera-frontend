@@ -27,7 +27,7 @@ function Cadastro() {
 
   const onSubmit = async (data) => {
     setCarregando(true);
-    
+
     const dadosAPI = {
       nome: data.nome,
       email: data.email,
@@ -41,12 +41,12 @@ function Cadastro() {
         valorMinimoPedido: Number(data.valorMinPedido.replace(",", ".")) * 100,
       },
     };
-    
+
     try {
       const dados = await post("usuarios", dadosAPI);
       const mensagemCadastro = await dados.json();
       setCarregando(false);
-      
+
       if (dados.status === 200) {
         setMensagem({
           texto: mensagemCadastro,
@@ -77,7 +77,7 @@ function Cadastro() {
       return;
     }
   };
-  
+
   return (
     <div className="Cadastro">
       <img src={Ilustracao} alt="Ilustração" className="desenhoBg" />
@@ -98,7 +98,7 @@ function Cadastro() {
           </Link>
         </span>
       </div>
-      </div>
+    </div>
   );
 }
 

@@ -4,7 +4,7 @@ import Modal from "@material-ui/core/Modal";
 import { Button } from "@material-ui/core";
 import clsx from "clsx";
 import TextField from "./Inputs/TextField";
-import InputAmount from "./Inputs/InputAmount";
+import InputAmount from "../Inputs/InputAmount";
 import Switch from "./Switch";
 import { useForm } from "react-hook-form";
 
@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SimpleModal() {
+export default function SimpleModal({ labelBotao }) {
   const classes = useStyles();
   const [modalStyle] = useState(getModalStyle());
   const [open, setOpen] = useState(false);
@@ -89,7 +89,7 @@ export default function SimpleModal() {
   const [ativarProduto, setAtivarProduto] = useState(true);
   const [permiteObservacao, setPermiteObservacao] = useState(true);
   const { register, handleSubmit } = useForm();
-  
+
 
   const handleOpen = () => {
     setOpen(true);
@@ -167,7 +167,7 @@ export default function SimpleModal() {
           variant="contained"
           className={clsx(classes.button, classes.contained)}
         >
-          Adicionar produto ao cardápio
+          {labelBotao}
         </Button>
       </div>
     </form>
@@ -180,8 +180,8 @@ export default function SimpleModal() {
         variant="contained"
         onClick={handleOpen}
         className={clsx(classes.button, classes.contained)}
-        >
-        Adicionar produto ao cardápio
+      >
+        {labelBotao}
       </Button>
       <Modal open={open} onClose={handleClose}>
         {body}

@@ -1,7 +1,7 @@
-const BASE_URL = "http://localhost:3000/";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 async function get(resource, token) {
-  const resposta = await fetch(BASE_URL + resource, {
+  const resposta = await fetch(`${BASE_URL}/` + resource, {
     headers: {
       authorization: token,
     }
@@ -11,7 +11,7 @@ async function get(resource, token) {
 }
 
 async function post(resource, data) {
-  const resposta = await fetch(BASE_URL + resource, {
+  const resposta = await fetch(`${BASE_URL}/` + resource, {
     method: "POST",
     body: JSON.stringify(data),
     headers: {
@@ -23,7 +23,7 @@ async function post(resource, data) {
 }
 
 async function put(resource, data) {
-  const resposta = await fetch(BASE_URL + resource, {
+  const resposta = await fetch(`${BASE_URL}/` + resource, {
     method: "PUT",
     body: JSON.stringify(data),
     headers: {
@@ -34,7 +34,7 @@ async function put(resource, data) {
 }
 
 async function del(resource) {
-  const resposta = await fetch(BASE_URL + resource, {
+  const resposta = await fetch(`${BASE_URL}/` + resource, {
     method: "DELETE",
   });
 
