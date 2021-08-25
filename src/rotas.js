@@ -9,6 +9,9 @@ import React from "react";
 import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
 import Dashboard from "./pages/Produtos";
+
+import LoginCliente from "./pages/Cliente/Login";
+
 import { ValidacaoFormProvider } from "./contexts/ValidacaoFormContext";
 
 import { AuthProvider } from "./contexts/AuthContext";
@@ -29,6 +32,7 @@ function Routes() {
           <ValidacaoFormProvider>
             <Route path="/" exact component={Login} />
             <Route path="/cadastro" exact component={Cadastro} />
+            <Route path="/login/cliente" exact component={LoginCliente} />
             <RotasProtegidas>
               <Route path="/produtos" component={Dashboard} />
             </RotasProtegidas>
