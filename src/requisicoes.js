@@ -10,34 +10,39 @@ async function get(resource, token) {
   return resposta;
 }
 
-async function post(resource, data) {
+async function post(resource, data, token) {
   const resposta = await fetch(`${BASE_URL}/` + resource, {
     method: "POST",
     body: JSON.stringify(data),
     headers: {
       "Content-type": "application/json",
+      authorization: token,
     },
   });
-
+  
   return await resposta;
 }
 
-async function put(resource, data) {
+async function put(resource, data, token) {
   const resposta = await fetch(`${BASE_URL}/` + resource, {
     method: "PUT",
     body: JSON.stringify(data),
     headers: {
       "Content-type": "application/json",
+      authorization: token,
     },
   });
   return resposta;
 }
 
-async function del(resource) {
+async function del(resource,token) {
   const resposta = await fetch(`${BASE_URL}/` + resource, {
     method: "DELETE",
+    headers: {
+      authorization: token,
+    }
   });
-
+  
   return resposta;
 }
 

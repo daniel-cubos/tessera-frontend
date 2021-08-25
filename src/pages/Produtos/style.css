@@ -64,7 +64,7 @@ button.logout {
   font-size: 32px;
 }
 
-.produtos {
+.dashboardSemProdutos {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -73,6 +73,7 @@ button.logout {
   width: 500px;
   text-align: center;
   gap: 32px;
+  margin-top: 150px;
 }
 
 .Modal {
@@ -93,4 +94,12 @@ span.avisoQtdCaracteres {
   font-size: 14px;
   font-weight: 400;
   font-family: var(--montserrat);
+}
+
+.produtos {
+  margin-top: 400px;
+  display: grid;
+  grid-template-columns: 592px 592px;
+  column-gap: 32px;
+  row-gap: 32px;
 }

@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./style.css";
 import profileImage from "../../assets/pizzaria.png";
 import Ilustracao from "../../assets/illustration-2.svg";
 import { useHistory } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import ModalNovoProduto from "../../components/ModalNovoProduto";
+import Snackbars from "../../components/Snackbar";
+import CardProduto from "../../components/CardProduto";
 
-export default function Dashboard() {
+function Dashboard() {
   const [produtosCadastrados, setProdutosCadastrados] = useState();
+  const [qtdProdutos, setQtdProdutos] = useState(0);
+  const [open, setOpen] = useState(false);
   const { deslogar, token } = useAuth();
   const history = useHistory();
 
@@ -21,23 +25,24 @@ export default function Dashboard() {
     try {
       const resposta = await get("produtos", token);
       const dados = await resposta.json();
-      if (produtosCadastrados === dados) return;
+      if (JSON.stringify(dados) === JSON.stringify(produtosCadastrados)) return;
       setProdutosCadastrados(dados);
+      setQtdProdutos(dados.length);
     } catch (error) {
       console.log(error.message);
     }
-  }
+  };
 
   useEffect(() => {
     buscarProdutos();
-  }, [produtosCadastrados]);
+  }, [open]);
 
   return (
     <div className="Dashboard">
       <div
         className="banner"
         style={{
-          backgroundImage: `linear-gradient(205.02deg, rgba(18, 18, 18, 0.2) 36.52%, rgba(18, 18, 18, 0.8) 77.14%), url(https://media.gazetadopovo.com.br/2021/07/09163516/receita-massa-pizza-bigstock-960x540.jpg)`,
+          backgroundImage: `linear-gradient(205.02deg, rgba(18, 18, 18, 0.2) 36.52%, rgba(18, 18, 18, 0.8) 77.14%), url('https://lh3.googleusercontent.com/d/1OLCQnzBu9xwUyNocAhAgqsK1LarpSSTN')`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -52,13 +57,31 @@ export default function Dashboard() {
         </div>
         <img src={Ilustracao} alt="" className="desenhoBanner" />
       </div>
-      <div className="produtos">
-        <p>
-          Você ainda não tem nenhum produto no seu cardápio. <br />
-          Gostaria de adicionar um novo produto?
-        </p>
-        <ModalNovoProduto />
-      </div>
+      {qtdProdutos === 0 ? (
+        <div className="dashboardSemProdutos">
+          <p>
+            Você ainda não tem nenhum produto no seu cardápio. <br />
+            Gostaria de adicionar um novo produto?
+          </p>
+          <ModalNovoProduto open={open} setOpen={setOpen} />
+          <Snackbars />
+        </div>
+      ) : (
+        <div className="produtos">
+          {produtosCadastrados.map((produto) => (
+            <CardProduto
+              nome={produto.nome}
+              descricao={produto.descricao}
+              preco={produto.preco}
+              id={produto.id}
+              ativo={produto.ativo}
+              permiteObservacoes={produto.permite_observacoes}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
+
+export default Dashboard;

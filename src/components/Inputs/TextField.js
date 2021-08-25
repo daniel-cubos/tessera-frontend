@@ -75,16 +75,17 @@ export default function TextFieldStyle({
     } else if (value) {
       setCampoEmBranco(false);
     }
-  }, [value, abrirMensagem]);
 
+  }, [value, abrirMensagem]);
+  
   const handleChange = (e) => {
     setValue(e.target.value);
   };
-
+  
   if (value !== undefined) {
     localStorage.setItem(id, valueRef.current);
   }
-
+  
   return (
     <div className={classes.root}>
       <CssTextField

@@ -152,6 +152,7 @@ export default function Steppers({ titulo, formsPassos, statusCarregamento }) {
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    setAbrirMensagem(false);
   };
 
   return (

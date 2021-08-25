@@ -50,10 +50,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function Switches({ id, label, register, value, setValue }) {
+export default function Switches({ id, label, register, value, setValue, unregister }) {
   const classes = useStyles();
 
   useEffect(() => {
+    unregister(`${id}`);
     register(`${id}`, { value });
   }, [value]);
 
