@@ -57,7 +57,7 @@ function Cadastro() {
         const timeoutID = setTimeout(() => {
           history.push("/");
           return clearTimeout(timeoutID);
-        }, 6000);
+        }, 2000);
         return;
       } else {
         setMensagem({

@@ -77,6 +77,7 @@ export default function InputAmount({ id, value, setValue, register, width }) {
 
   const handleChange = (e) => {
     let valueInput = e.target.value;
+    if (isNaN(Number(valueInput.replace(",", ".")))) return;
     if (valueInput.length === 1) {
       valueInput = `00,0${valueInput}`;
     } else if (valueInput) {

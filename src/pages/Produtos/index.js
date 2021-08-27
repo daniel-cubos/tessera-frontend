@@ -1,14 +1,23 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./style.css";
 import profileImage from "../../assets/pizzaria.png";
 import Ilustracao from "../../assets/illustration-2.svg";
 import { useHistory } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import ModalNovoProduto from "../../components/ModalNovoProduto";
+import Snackbars from "../../components/Snackbar";
+import CardProduto from "../../components/CardProduto";
+import useValidacaoForm from "../../hooks/useValidacaoForm";
 
-export default function Dashboard() {
+function Dashboard() {
   const [produtosCadastrados, setProdutosCadastrados] = useState();
+  const [qtdProdutos, setQtdProdutos] = useState(0);
+  const [abrirModalNovoProd, setAbrirModalNovoProd] = useState(false);
+  const [abrirModalEditProd, setAbrirModalEditProd] = useState(false);
+  const [recarregar, setRecarregar] = useState(false);
+  const [infoRestaurante, setInfoRestaurante] = useState({});
   const { deslogar, token } = useAuth();
+  const { setAbrirMensagem } = useValidacaoForm();
   const history = useHistory();
 
   const redirLogin = () => {
@@ -21,23 +30,51 @@ export default function Dashboard() {
     try {
       const resposta = await get("produtos", token);
       const dados = await resposta.json();
-      if (produtosCadastrados === dados) return;
+      if (JSON.stringify(dados) === JSON.stringify(produtosCadastrados)) return;
       setProdutosCadastrados(dados);
+      setQtdProdutos(dados.length);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const infosRestaurante = async () => {
+    try {
+      const resposta = await get("usuarios", token);
+      const dados = await resposta.json();
+  
+      const { nomeRestaurante, categoriaRestaurante } = dados;
+      try {
+        const resposta = await get(`categoria/${categoriaRestaurante}`);
+        const categoria = await resposta.json();
+    
+        const infoCategoria = categoria[0];
+  
+        setInfoRestaurante({
+          nome: nomeRestaurante,
+          imgCategoria: infoCategoria.img_categoria,
+        });
+      } catch (error) {
+        console.log(error.message);
+      }
     } catch (error) {
       console.log(error.message);
     }
   }
 
   useEffect(() => {
+    infosRestaurante();
     buscarProdutos();
-  }, [produtosCadastrados]);
+    setRecarregar(false);
+    setAbrirMensagem(false);
+  }, [abrirModalNovoProd, abrirModalEditProd, recarregar]);
 
   return (
     <div className="Dashboard">
       <div
         className="banner"
         style={{
-          backgroundImage: `linear-gradient(205.02deg, rgba(18, 18, 18, 0.2) 36.52%, rgba(18, 18, 18, 0.8) 77.14%), url(https://media.gazetadopovo.com.br/2021/07/09163516/receita-massa-pizza-bigstock-960x540.jpg)`,
+          backgroundImage: `linear-gradient(205.02deg, rgba(18, 18, 18, 0.2) 36.52%, rgba(18, 18, 18, 0.8) 77.14%), url('${infoRestaurante.imgCategoria}')`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -45,20 +82,50 @@ export default function Dashboard() {
       >
         <img src={profileImage} alt="" className="profileImage" />
         <div className="cabecalho">
-          <h1>Pizza Pizzaria & Delivery</h1>
+          <h1>{infoRestaurante.nome}</h1>
           <button className="logout" onClick={() => deslogar(redirLogin)}>
             Logout
           </button>
         </div>
         <img src={Ilustracao} alt="" className="desenhoBanner" />
       </div>
-      <div className="produtos">
-        <p>
-          Você ainda não tem nenhum produto no seu cardápio. <br />
-          Gostaria de adicionar um novo produto?
-        </p>
-        <ModalNovoProduto />
-      </div>
+      {qtdProdutos === 0 ? (
+        <div className="dashboardSemProdutos">
+          <p>
+            Você ainda não tem nenhum produto no seu cardápio. <br />
+            Gostaria de adicionar um novo produto?
+          </p>
+          <ModalNovoProduto
+            open={abrirModalNovoProd}
+            setOpen={setAbrirModalNovoProd}
+          />
+          <Snackbars />
+        </div>
+      ) : (
+        <div className="produtos">
+          <div></div>
+          <ModalNovoProduto
+            open={abrirModalNovoProd}
+            setOpen={setAbrirModalNovoProd}
+          />
+          {produtosCadastrados.map((produto) => (
+            <CardProduto
+              nome={produto.nome}
+              descricao={produto.descricao}
+              preco={produto.preco}
+              id={produto.id}
+              ativo={produto.ativo}
+              permiteObservacoes={produto.permite_observacoes}
+              open={abrirModalEditProd}
+              setOpen={setAbrirModalEditProd}
+              key={produto.id}
+              setRecarregar={setRecarregar}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
+
+export default Dashboard;

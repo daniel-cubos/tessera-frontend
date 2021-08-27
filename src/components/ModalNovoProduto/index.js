@@ -7,6 +7,8 @@ import TextField from "../Inputs/TextField";
 import InputAmount from "../Inputs/InputAmount";
 import Switch from "../Switch";
 import { useForm } from "react-hook-form";
+import useAuth from "../../hooks/useAuth";
+import useValidacaoForm from "../../hooks/useValidacaoForm";
 
 function getModalStyle() {
   const top = 50;
@@ -79,36 +81,88 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SimpleModal() {
+export default function SimpleModal({ open, setOpen }) {
   const classes = useStyles();
   const [modalStyle] = useState(getModalStyle());
-  const [open, setOpen] = useState(false);
   const [nomeProduto, setNomeProduto] = useState();
   const [descricaoProduto, setDescricaoProduto] = useState();
   const [valor, setValor] = useState();
   const [ativarProduto, setAtivarProduto] = useState(true);
   const [permiteObservacao, setPermiteObservacao] = useState(true);
-  const { register, handleSubmit } = useForm();
-
+  const { register, handleSubmit, unregister } = useForm();
+  const { post } = require("../../requisicoes");
+  const { token } = useAuth();
+  const { setMensagem, setAbrirMensagem } = useValidacaoForm();
 
   const handleOpen = () => {
     setOpen(true);
   };
-
+  
   const handleClose = () => {
-    localStorage.clear();
     setOpen(false);
+    unregister("nomeProduto");
+    unregister("descricaoProduto");
+    unregister("valor");
+    unregister("ativarProduto");
+    unregister("permiteObservacao");
+    setNomeProduto();
+    localStorage.removeItem("nomeProduto");
+    setDescricaoProduto();
+    localStorage.removeItem("descricaoProduto");
+    setValor();
+    localStorage.removeItem("valor");
+    setAbrirMensagem(false)
   };
 
-  const onSubmit = (data) => {
-    console.log(data);
-  };
+  
+  const onSubmit = async (data) => {
+    const dadosAPI = {
+      nome: data.nomeProduto,
+      descricao: data.descricaoProduto,
+      preco: Number(data.valor.replace(",", ".")) * 100,
+      ativo: Boolean(data.ativarProduto),
+      permiteObservacoes: Boolean(data.permiteObservacao),
+    };
 
+    try {
+      const dados = await post("produtos", dadosAPI, token);
+      
+      const mensagem = await dados.json();
+
+      if (dados.status === 200) {
+        setMensagem({
+          texto: mensagem,
+          severidade: "success",
+        });
+        setAbrirMensagem(true);
+        const timeoutID = setTimeout(() => {
+          handleClose();
+          return clearTimeout(timeoutID);
+        }, 1000);
+        return;
+      } else {
+        setMensagem({
+          texto: mensagem,
+          severidade: "error",
+        });
+        setAbrirMensagem(true);
+        return;
+      }
+    } catch (error) {
+      setMensagem({
+        texto: error.message,
+        severidade: "error",
+      });
+      setAbrirMensagem(true);
+      return;
+    }
+  };
+  
   const body = (
     <form
-      style={modalStyle}
-      className={classes.paper}
-      onSubmit={handleSubmit(onSubmit)}
+    style={modalStyle}
+    className={classes.paper}
+    onSubmit={handleSubmit(onSubmit)}
     >
       <div className="FormNovoProduto">
         <h1>Novo produto</h1>
@@ -130,7 +184,7 @@ export default function SimpleModal() {
           value={descricaoProduto}
           setValue={setDescricaoProduto}
           register={register}
-        />
+          />
         <span className="avisoQtdCaracteres">Máx.: 50 caracteres</span>
         <label htmlFor="valor">Valor</label>
         <InputAmount
@@ -139,40 +193,42 @@ export default function SimpleModal() {
           setValue={setValor}
           register={register}
           width="176px"
-        />
+          />
         <Switch
           id="ativarProduto"
           label="Ativar produto"
           register={register}
           value={ativarProduto}
           setValue={setAtivarProduto}
-        />
+          unregister={unregister}
+          />
         <Switch
           id="permiteObservacao"
           label="Permite observações"
           register={register}
           value={permiteObservacao}
           setValue={setPermiteObservacao}
-        />
+          unregister={unregister}
+          />
       </div>
       <div className={classes.buttonsStepper}>
         <Button
           onClick={handleClose}
           className={clsx(classes.button, classes.text)}
-        >
+          >
           Cancelar
         </Button>
         <Button
           type="submit"
           variant="contained"
           className={clsx(classes.button, classes.contained)}
-        >
+          >
           Adicionar produto ao cardápio
         </Button>
       </div>
     </form>
   );
-
+  
   return (
     <div>
       <Button

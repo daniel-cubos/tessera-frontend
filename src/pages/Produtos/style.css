@@ -64,7 +64,7 @@ button.logout {
   font-size: 32px;
 }
 
-.produtos {
+.dashboardSemProdutos {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -73,13 +73,14 @@ button.logout {
   width: 500px;
   text-align: center;
   gap: 32px;
+  margin-top: 150px;
 }
 
 .Modal {
   z-index: 2;
 }
 
-.FormNovoProduto h1 {
+.FormNovoProduto h1, .FormEditarProduto h1  {
   font-family: var(--baloo);
   color: hsla(14, 99%, 41%, 1);
   font-size: 32px;
@@ -93,4 +94,14 @@ span.avisoQtdCaracteres {
   font-size: 14px;
   font-weight: 400;
   font-family: var(--montserrat);
+}
+
+.produtos {
+  margin-top: 300px;
+  display: grid;
+  grid-template-columns: 592px 592px;
+  column-gap: 32px;
+  row-gap: 32px;
+  justify-items: center;
+  align-items: flex-start;
 }

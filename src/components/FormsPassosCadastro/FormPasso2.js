@@ -3,28 +3,27 @@ import TextField from "../Inputs/TextField";
 import Select from "../Inputs/Select";
 import useValidacaoForm from "../../hooks/useValidacaoForm";
 
-const opcoes = [
-  "Escolha uma categoria",
-  "Diversos",
-  "Lanches",
-  "Carnes",
-  "Massas",
-  "Pizzas",
-  "Japonesa",
-  "Chinesa",
-  "Mexicano",
-  "Brasileira",
-  "Italiana",
-  "Árabe",
-];
-
 function FormPasso2({ register }) {
   const [nomeRestaurante, setNomeRestaurante] = useState();
   const [categoria, setCategoria] = useState("");
   const [descricao, setDescricao] = useState();
   const { setErro, setMensagem, setAbrirMensagem } = useValidacaoForm();
+  const [opcoes, setOpcoes] = useState([]);
+  const { get } = require("../../requisicoes");
+
+  const buscarCategorias = async () => {
+    try {
+      const resposta = await get("categoria");
+      const categorias = await resposta.json();
+  
+      setOpcoes(categorias);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
 
   useEffect(() => {
+    buscarCategorias();
     if (!nomeRestaurante || !categoria) {
       setMensagem({
         texto: "Campo obrigatório vazio!",
