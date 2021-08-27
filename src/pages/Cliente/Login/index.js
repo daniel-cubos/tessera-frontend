@@ -8,15 +8,18 @@ import FormControl from '@material-ui/core/FormControl';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import LinkEntrarCadastrar from '../../components/LinkEntrarCadastrar';
+import LinkEntrarCadastrar from '../../../components/LinkEntrarCadastrar';
 import { useForm } from 'react-hook-form';
-import IllustrationLogin from '../../assets/illustration-3.svg';
+import IllustrationLogin from '../../../assets/illustration.svg';
+import barril from '../../../assets/barril.svg';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import useAuth from '../../hooks/useAuth';
+import useAuth from '../../../hooks/useAuth';
 import { useHistory } from 'react-router-dom';
 
-function Login() {
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
+function LoginCliente() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const classes = useStyles();
@@ -41,24 +44,22 @@ function Login() {
     }
     setLoading(true);
     try {
-      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/login`, {
+      const response = await fetch(`${BASE_URL}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
       });
-
       if (!response.ok) {
         setLoading(false);
         toast.error('Email ou senha incorretos.', toastError);
         return;
       }
       const dados = await response.json();
-      console.log(dados);
-      logar(dados.token, () => history.push('/produtos'));
+      logar(dados.token, () => history.push('/cliente/restaurantes'));
     } catch (error) {
-      setLoading(false);
+      toast.error('Ocorreu um erro ao realizar login.', toastError);
     }
     setLoading(false);
   };
@@ -76,9 +77,16 @@ function Login() {
       <div className={loading ? classes.backdrop : classes.noBackdrop}>
         <CircularProgress />
       </div>
-      <img className={classes.illustrationLogin} src={IllustrationLogin} alt="" />
+      <img
+        className={classes.illustrationLogin}
+        src={IllustrationLogin}
+        alt='illustration'
+      />
       <div className={classes.root}>
-        <h2 className={classes.loginTitle}>Login</h2>
+        <div className={classes.loginHeader}>
+          <h2>Login</h2>
+          <img src={barril} alt='logo barril' />
+        </div>
         <form
           className={classes.form}
           noValidate
@@ -123,7 +131,7 @@ function Login() {
         </form>
         <LinkEntrarCadastrar
           texto='Ainda não tem uma conta?'
-          destino='/cadastro'
+          destino='/cliente/cadastro'
           titulo='Cadastre-se'
         />
       </div>
@@ -131,4 +139,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginCliente;
