@@ -80,7 +80,7 @@ button.logout {
   z-index: 2;
 }
 
-.FormNovoProduto h1 {
+.FormNovoProduto h1, .FormEditarProduto h1  {
   font-family: var(--baloo);
   color: hsla(14, 99%, 41%, 1);
   font-size: 32px;
@@ -97,9 +97,11 @@ span.avisoQtdCaracteres {
 }
 
 .produtos {
-  margin-top: 400px;
+  margin-top: 300px;
   display: grid;
   grid-template-columns: 592px 592px;
   column-gap: 32px;
   row-gap: 32px;
+  justify-items: center;
+  align-items: flex-start;
 }

@@ -127,9 +127,12 @@ export default function SimpleModal({ open, setOpen, id, nome, descricao, preco,
     register("valor");
     register("ativarProduto");
     register("permiteObservacao");
-  }, []);
+  }, [open]);
   
   const onSubmit = async (data) => {
+    if (data.nomeProduto === "" || !data.nomeProduto) return; 
+    if (data.valor === "" || !data.valor) return;
+
     const dadosAPI = {
       nome: data.nomeProduto,
       descricao: data.descricaoProduto,
@@ -178,8 +181,8 @@ export default function SimpleModal({ open, setOpen, id, nome, descricao, preco,
     className={classes.paper}
     onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="FormNovoProduto">
-        <h1>Novo produto</h1>
+      <div className="FormEditarProduto">
+        <h1>Editar produto</h1>
         <label htmlFor="nome">Nome</label>
         <TextField
           id="nomeProduto"

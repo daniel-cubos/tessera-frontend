@@ -92,7 +92,7 @@ export default function SimpleModal({ open, setOpen }) {
   const { register, handleSubmit, unregister } = useForm();
   const { post } = require("../../requisicoes");
   const { token } = useAuth();
-  const { setMensagem, setAbrirMensagem } = useValidacaoForm()
+  const { setMensagem, setAbrirMensagem } = useValidacaoForm();
 
   const handleOpen = () => {
     setOpen(true);

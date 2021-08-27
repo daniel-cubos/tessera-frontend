@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
+import Button from "@material-ui/core/Button";
 import imgProduto from "../../assets/pizza.png";
 import ModalEditarProduto from "../ModalEditarProduto";
-import { useEffect } from "react";
+import clsx from "clsx";
+import useAuth from "../../hooks/useAuth";
+import useValidacaoForm from "../../hooks/useValidacaoForm";
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -56,17 +59,47 @@ const useStyles = makeStyles(() => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    flexDirection: "column",
+    gap: "16px",
+  },
+  button: {
+    borderRadius: "20px",
+    textTransform: "none",
+    boxShadow: "none",
+    height: "40px",
+    fontFamily: "'Montserrat', sans-serif",
+    fontWeight: "600",
+    fontSize: "14px",
+  },
+  text: {
+    color: "hsla(14, 99%, 41%, 1)",
+    "&:hover": {
+      color: "hsla(14, 84%, 36%, 1)",
+      boxShadow: "none",
+      background: "none",
+    },
+    "&:disabled": {
+      color: "hsla(218, 8%, 80%, 1)",
+    },
   },
 }));
 
-export default function CardProduto({ nome, descricao, preco, id, ativo, permiteObservacoes }) {
+export default function CardProduto({
+  nome,
+  descricao,
+  preco,
+  id,
+  ativo,
+  permiteObservacoes,
+  open,
+  setOpen,
+  setRecarregar,
+}) {
   const classes = useStyles();
-  const [hover, setHover] = useState(false);  
-  const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-
-  }, [open]);
+  const [hover, setHover] = useState(false);
+  const { del } = require("../../requisicoes");
+  const { token } = useAuth();
+  const { setMensagem, setAbrirMensagem } = useValidacaoForm();
 
   const handleHoverOver = () => {
     setHover(true);
@@ -74,6 +107,37 @@ export default function CardProduto({ nome, descricao, preco, id, ativo, permite
 
   const handleHoverLeave = () => {
     setHover(false);
+  };
+
+  const handleDel = async () => {
+    try {
+      const response = await del(`produtos/${id}`, token);
+      const mensagem = await response.json();
+
+      if (response.status === 200) {
+        setMensagem({
+          texto: mensagem,
+          severidade: "success",
+        });
+        setAbrirMensagem(true);
+        setRecarregar(true);
+        return;
+      } else {
+        setMensagem({
+          texto: mensagem,
+          severidade: "error",
+        });
+        setAbrirMensagem(true);
+      }
+      return;
+    } catch (error) {
+      setMensagem({
+        texto: error.message,
+        severidade: "error",
+      });
+      setAbrirMensagem(true);
+      return;
+    }
   };
 
   return (
@@ -94,7 +158,22 @@ export default function CardProduto({ nome, descricao, preco, id, ativo, permite
         className={classes.hoverCard}
         style={{ display: `${hover ? "flex" : "none"}` }}
       >
-        <ModalEditarProduto id={id} nome={nome} descricao={descricao} preco={preco} ativo={ativo} permiteObservacoes={permiteObservacoes} open={open} setOpen={setOpen} />
+        <Button
+          className={clsx(classes.button, classes.text)}
+          onClick={handleDel}
+        >
+          Excluir produto do catálogo
+        </Button>
+        <ModalEditarProduto
+          id={id}
+          nome={nome}
+          descricao={descricao}
+          preco={preco}
+          ativo={ativo}
+          permiteObservacoes={permiteObservacoes}
+          open={open}
+          setOpen={setOpen}
+        />
       </div>
     </Paper>
   );

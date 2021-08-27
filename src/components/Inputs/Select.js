@@ -112,10 +112,10 @@ export default function Selects({ id, opcoes, value, setValue, register }) {
         IconComponent={ExpandMoreIcon}
         MenuProps={MenuProps}
       >
-        {opcoes.map((opcao, index) => {
+        {opcoes.map((opcao) => {
           return (
-            <MenuItem value={index} className={classes.root}>
-              {opcao}
+            <MenuItem value={opcao.id} className={classes.root}>
+              {opcao.nome}
             </MenuItem>
           );
         })}
