@@ -13,8 +13,11 @@ import { useForm } from 'react-hook-form';
 import IllustrationLogin from '../../../assets/illustration.svg';
 import barril from '../../../assets/barril.svg';
 import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import useAuth from '../../../hooks/useAuth';
 import { useHistory } from 'react-router-dom';
+
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 function LoginCliente() {
   const [showPassword, setShowPassword] = useState(false);
@@ -41,7 +44,7 @@ function LoginCliente() {
     }
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3000/login', {
+      const response = await fetch(`${BASE_URL}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -54,7 +57,7 @@ function LoginCliente() {
         return;
       }
       const dados = await response.json();
-      logar(dados.token, () => history.push('/restaurantes'));
+      logar(dados.token, () => history.push('/cliente/restaurantes'));
     } catch (error) {
       toast.error('Ocorreu um erro ao realizar login.', toastError);
     }
@@ -128,7 +131,7 @@ function LoginCliente() {
         </form>
         <LinkEntrarCadastrar
           texto='Ainda não tem uma conta?'
-          destino='/cadastro'
+          destino='/cliente/cadastro'
           titulo='Cadastre-se'
         />
       </div>

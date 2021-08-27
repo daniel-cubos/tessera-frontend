@@ -12,6 +12,7 @@ import LinkEntrarCadastrar from '../../components/LinkEntrarCadastrar';
 import { useForm } from 'react-hook-form';
 import IllustrationLogin from '../../assets/illustration-3.svg';
 import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import useAuth from '../../hooks/useAuth';
 import { useHistory } from 'react-router-dom';
 
