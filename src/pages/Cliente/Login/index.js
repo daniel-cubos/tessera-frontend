@@ -17,7 +17,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import useAuth from '../../../hooks/useAuth';
 import { useHistory } from 'react-router-dom';
 
-const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 function LoginCliente() {
   const [showPassword, setShowPassword] = useState(false);
@@ -44,7 +43,7 @@ function LoginCliente() {
     }
     setLoading(true);
     try {
-      const response = await fetch(`${BASE_URL}/login`, {
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

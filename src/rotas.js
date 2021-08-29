@@ -33,8 +33,8 @@ function Routes() {
         <Switch>
           <ValidacaoFormProvider>
             <Route path="/" exact component={Login} />
-            <Route path="/cadastro" exact component={Cadastro} />
-            <Route path="/cliente/login" component={LoginCliente} />
+            <Route path="/cadastro" component={Cadastro} />
+            <Route path="/cliente" component={LoginCliente} />
             <Route path="/cliente/cadastro" component={CadastroCliente} />
             <RotasProtegidas>
               <Route path="/produtos" component={Dashboard} />
