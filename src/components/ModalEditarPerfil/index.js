@@ -195,7 +195,7 @@ export default function SimpleModal({ open, setOpen }) {
           nome: data.nomeRestaurante,
           descricao: data.descricao,
           idCategoria: data.categoria,
-          taxaEntrega: Number(data.taxaEntrega.replace(",", ".")) * 100,
+          taxaEntrega: (Number(data.taxaEntrega.replace(",", ".")) * 100),
           tempoEntregaEmMinutos: Number(data.tempoEntrega),
           valorMinimoPedido:
             Number(data.valorMinPedido.replace(",", ".")) * 100,

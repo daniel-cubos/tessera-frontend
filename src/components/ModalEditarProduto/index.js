@@ -130,11 +130,11 @@ export default function SimpleModal({ open, setOpen, id, nome, descricao, preco,
     const dadosAPI = {
       nome: data.nomeProduto,
       descricao: data.descricaoProduto,
-      preco: Number(data.valor.replace(",", ".")) * 100,
+      preco: Math.round(Number(data.valor.replace(",", ".")) * 100),
       ativo: Boolean(data.ativarProduto),
       permiteObservacoes: Boolean(data.permiteObservacao),
     };
-
+    
     try {
       const dados = await put(`produtos/${id}`, dadosAPI, token);
       
