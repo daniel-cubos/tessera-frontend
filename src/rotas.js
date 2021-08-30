@@ -7,6 +7,7 @@ import {
 import React from "react";
 
 import Login from "./pages/Login";
+import Pedidos from "./pages/Pedidos";
 import Cadastro from "./pages/Cadastro";
 import Dashboard from "./pages/Produtos";
 
@@ -37,6 +38,7 @@ function Routes() {
             <Route path="/cliente/login" component={LoginCliente} />
             <Route path="/cliente/cadastro" component={CadastroCliente} />
             <RotasProtegidas>
+              <Route path="/pedidos" component={Pedidos} />              
               <Route path="/produtos" component={Dashboard} />
               <Route path="/cliente/restaurantes" component={RestauranteCliente} />
             </RotasProtegidas>
