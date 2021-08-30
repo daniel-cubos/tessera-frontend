@@ -13,7 +13,7 @@ p, p.MuiFormHelperText-root {
 
 .Cadastro {
   min-height: 100vh;
-  background-image: url("../../assets/bg-cadastro.png");
+  background-image: url("../../../assets/bg-cadastro.png");
   background-repeat: no-repeat;
   background-size: cover;
   position: relative;

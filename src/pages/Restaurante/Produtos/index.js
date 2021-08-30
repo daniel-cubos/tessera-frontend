@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
 import "./style.css";
-import profileImage from "../../assets/pizzaria.png";
-import Ilustracao from "../../assets/illustration-2.svg";
+import Ilustracao from "../../../assets/illustration-2.svg";
 import { useHistory } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
-import ModalNovoProduto from "../../components/ModalNovoProduto";
-import Snackbars from "../../components/Snackbar";
-import CardProduto from "../../components/CardProduto";
-import useValidacaoForm from "../../hooks/useValidacaoForm";
+import useAuth from "../../../hooks/useAuth";
+import ModalNovoProduto from "../../../components/ModalNovoProduto";
+import Snackbars from "../../../components/Snackbar";
+import CardProduto from "../../../components/CardProduto";
+import useValidacaoForm from "../../../hooks/useValidacaoForm";
+import ModalEditarPerfil from "../../../components/ModalEditarPerfil"
 
 function Dashboard() {
   const [produtosCadastrados, setProdutosCadastrados] = useState();
   const [qtdProdutos, setQtdProdutos] = useState(0);
   const [abrirModalNovoProd, setAbrirModalNovoProd] = useState(false);
   const [abrirModalEditProd, setAbrirModalEditProd] = useState(false);
+  const [abrirModalEditPerfil, setAbrirModalEditPerfil] = useState(false);
   const [recarregar, setRecarregar] = useState(false);
   const [infoRestaurante, setInfoRestaurante] = useState({});
   const { deslogar, token } = useAuth();
@@ -24,7 +25,7 @@ function Dashboard() {
     history.push("/");
   };
 
-  const { get } = require("../../requisicoes");
+  const { get } = require("../../../requisicoes");
 
   const buscarProdutos = async () => {
     try {
@@ -67,7 +68,7 @@ function Dashboard() {
     buscarProdutos();
     setRecarregar(false);
     setAbrirMensagem(false);
-  }, [abrirModalNovoProd, abrirModalEditProd, recarregar]);
+  }, [abrirModalNovoProd, abrirModalEditProd, abrirModalEditPerfil, recarregar]);
 
   return (
     <div className="Dashboard">
@@ -80,7 +81,7 @@ function Dashboard() {
           backgroundPosition: "center",
         }}
       >
-        <img src={profileImage} alt="" className="profileImage" />
+        <ModalEditarPerfil open={abrirModalEditPerfil} setOpen={setAbrirModalEditPerfil} />
         <div className="cabecalho">
           <h1>{infoRestaurante.nome}</h1>
           <button className="logout" onClick={() => deslogar(redirLogin)}>
@@ -116,6 +117,7 @@ function Dashboard() {
               id={produto.id}
               ativo={produto.ativo}
               permiteObservacoes={produto.permite_observacoes}
+              urlImagem={produto.img_produto}
               open={abrirModalEditProd}
               setOpen={setAbrirModalEditProd}
               key={produto.id}

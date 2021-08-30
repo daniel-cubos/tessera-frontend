@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
-import imgProduto from "../../assets/pizza.png";
 import ModalEditarProduto from "../ModalEditarProduto";
 import clsx from "clsx";
 import useAuth from "../../hooks/useAuth";
@@ -91,6 +90,7 @@ export default function CardProduto({
   id,
   ativo,
   permiteObservacoes,
+  urlImagem,
   open,
   setOpen,
   setRecarregar,
@@ -153,7 +153,7 @@ export default function CardProduto({
           R$ {String((preco / 100).toFixed(2)).replace(".", ",")}
         </div>
       </div>
-      <img src={imgProduto} alt="" className={classes.imgProduto} />
+      <img src={urlImagem} alt="" className={classes.imgProduto} />
       <div
         className={classes.hoverCard}
         style={{ display: `${hover ? "flex" : "none"}` }}
@@ -171,6 +171,7 @@ export default function CardProduto({
           preco={preco}
           ativo={ativo}
           permiteObservacoes={permiteObservacoes}
+          urlImagem={urlImagem}
           open={open}
           setOpen={setOpen}
         />

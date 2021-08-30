@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/styles';
-import BackgroundLogin from '../../assets/bg-login.png';
+import BackgroundLogin from '../../../assets/bg-login.png';
 
 const useStyles = makeStyles((theme) => ({
   containerLogin: {
