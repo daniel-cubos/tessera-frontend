@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   illustrationLogin: {
     height: '80%',
     zIndex: 1,
-    marginLeft: '10.15%',
+    marginLeft: '15.15%',
   },
   root: {
     width: 488,
