@@ -6,9 +6,10 @@ import {
 } from "react-router-dom";
 import React from "react";
 
-import Login from "./pages/Restaurante/Login";
-import Cadastro from "./pages/Restaurante/Cadastro";
-import Dashboard from "./pages/Restaurante/Produtos";
+import Login from "./pages/Login";
+import Pedidos from "./pages/Pedidos";
+import Cadastro from "./pages/Cadastro";
+import Dashboard from "./pages/Produtos";
 
 import LoginCliente from "./pages/Cliente/Login";
 import CadastroCliente from "./pages/Cliente/Cadastro";
@@ -37,6 +38,7 @@ function Routes() {
             <Route path="/cliente" component={LoginCliente} />
             <Route path="/cliente/cadastro" component={CadastroCliente} />
             <RotasProtegidas>
+              <Route path="/pedidos" component={Pedidos} />              
               <Route path="/produtos" component={Dashboard} />
               <Route path="/cliente/restaurantes" component={RestauranteCliente} />
             </RotasProtegidas>
