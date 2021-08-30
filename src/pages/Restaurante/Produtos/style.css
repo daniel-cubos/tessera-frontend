@@ -79,13 +79,6 @@ button.logout {
   z-index: 2;
 }
 
-.FormNovoProduto h1, .FormEditarProduto h1, .FormEditarPerfil h1 {
-  font-family: var(--baloo);
-  color: hsla(14, 99%, 41%, 1);
-  font-size: 32px;
-  margin-bottom: 40px;
-}
-
 span.avisoQtdCaracteres {
   margin-left: 24px;
   margin-top: -41px;

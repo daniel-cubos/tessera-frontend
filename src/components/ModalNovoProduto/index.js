@@ -4,6 +4,7 @@ import Modal from "@material-ui/core/Modal";
 import { Button } from "@material-ui/core";
 import clsx from "clsx";
 import TextField from "../Inputs/TextField";
+import UploadImage from "../UploadImage";
 import InputAmount from "../Inputs/InputAmount";
 import Switch from "../Switch";
 import { useForm } from "react-hook-form";
@@ -74,6 +75,21 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "row",
   },
+  formulario: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  novoProduto: {
+    display: "flex",
+    flexDirection: "row",
+    gap: "48px",
+  },
+  titulo: {
+    fontFamily: "'Baloo 2', cursive",
+    color: "hsla(14, 99%, 41%, 1)",
+    fontSize: "32px",
+    marginBottom: "40px",
+  },
 }));
 
 export default function SimpleModal({ open, setOpen }) {
@@ -83,6 +99,7 @@ export default function SimpleModal({ open, setOpen }) {
   const [valor, setValor] = useState();
   const [ativarProduto, setAtivarProduto] = useState(true);
   const [permiteObservacao, setPermiteObservacao] = useState(true);
+  const [baseImage, setBaseImage] = useState("");
   const { register, handleSubmit, unregister } = useForm();
   const { post } = require("../../requisicoes");
   const { token } = useAuth();
@@ -91,7 +108,7 @@ export default function SimpleModal({ open, setOpen }) {
   const handleOpen = () => {
     setOpen(true);
   };
-  
+
   const handleClose = () => {
     setOpen(false);
     unregister("nomeProduto");
@@ -105,10 +122,9 @@ export default function SimpleModal({ open, setOpen }) {
     localStorage.removeItem("descricaoProduto");
     setValor();
     localStorage.removeItem("valor");
-    setAbrirMensagem(false)
+    setAbrirMensagem(false);
   };
 
-  
   const onSubmit = async (data) => {
     const dadosAPI = {
       nome: data.nomeProduto,
@@ -116,11 +132,12 @@ export default function SimpleModal({ open, setOpen }) {
       preco: Math.round(Number(data.valor.replace(",", ".")) * 100),
       ativo: Boolean(data.ativarProduto),
       permiteObservacoes: Boolean(data.permiteObservacao),
+      imagemProduto: data.upload,
     };
-    console.log(dadosAPI)
+
     try {
       const dados = await post("produtos", dadosAPI, token);
-      
+
       const mensagem = await dados.json();
 
       if (dados.status === 200) {
@@ -151,77 +168,77 @@ export default function SimpleModal({ open, setOpen }) {
       return;
     }
   };
-  
+
   const body = (
-    <form
-    className={classes.paper}
-    onSubmit={handleSubmit(onSubmit)}
-    >
-      <div className="FormNovoProduto">
-        <h1>Novo produto</h1>
-        <label htmlFor="nome">Nome</label>
-        <TextField
-          id="nomeProduto"
-          type="text"
-          value={nomeProduto}
-          setValue={setNomeProduto}
-          register={register}
-        />
-        <label htmlFor="email">Descrição</label>
-        <TextField
-          type="text"
-          id="descricaoProduto"
-          multiline={true}
-          rows={2}
-          inputProps={{ maxLength: "50" }}
-          value={descricaoProduto}
-          setValue={setDescricaoProduto}
-          register={register}
+    <form className={classes.paper} onSubmit={handleSubmit(onSubmit)}>
+      <div className={classes.novoProduto}>
+        <div className={classes.formulario}>
+          <h1 className={classes.titulo}>Novo produto</h1>
+          <label htmlFor="nome">Nome</label>
+          <TextField
+            id="nomeProduto"
+            type="text"
+            value={nomeProduto}
+            setValue={setNomeProduto}
+            register={register}
           />
-        <span className="avisoQtdCaracteres">Máx.: 50 caracteres</span>
-        <label htmlFor="valor">Valor</label>
-        <InputAmount
-          id="valor"
-          value={valor}
-          setValue={setValor}
-          register={register}
-          width="176px"
+          <label htmlFor="email">Descrição</label>
+          <TextField
+            type="text"
+            id="descricaoProduto"
+            multiline={true}
+            rows={2}
+            inputProps={{ maxLength: "50" }}
+            value={descricaoProduto}
+            setValue={setDescricaoProduto}
+            register={register}
           />
-        <Switch
-          id="ativarProduto"
-          label="Ativar produto"
-          register={register}
-          value={ativarProduto}
-          setValue={setAtivarProduto}
-          unregister={unregister}
+          <span className="avisoQtdCaracteres">Máx.: 50 caracteres</span>
+          <label htmlFor="valor">Valor</label>
+          <InputAmount
+            id="valor"
+            value={valor}
+            setValue={setValor}
+            register={register}
+            width="176px"
           />
-        <Switch
-          id="permiteObservacao"
-          label="Permite observações"
-          register={register}
-          value={permiteObservacao}
-          setValue={setPermiteObservacao}
-          unregister={unregister}
+          <Switch
+            id="ativarProduto"
+            label="Ativar produto"
+            register={register}
+            value={ativarProduto}
+            setValue={setAtivarProduto}
+            unregister={unregister}
           />
+          <Switch
+            id="permiteObservacao"
+            label="Permite observações"
+            register={register}
+            value={permiteObservacao}
+            setValue={setPermiteObservacao}
+            unregister={unregister}
+          />
+        </div>
+        <UploadImage baseImage={baseImage} setBaseImage={setBaseImage} register={register} />
       </div>
       <div className={classes.buttonsStepper}>
         <Button
           onClick={handleClose}
           className={clsx(classes.button, classes.text)}
-          >
+        >
           Cancelar
         </Button>
         <Button
           type="submit"
           variant="contained"
           className={clsx(classes.button, classes.contained)}
-          >
+        >
           Adicionar produto ao cardápio
         </Button>
       </div>
     </form>
   );
-  
+
   return (
     <div>
       <Button
@@ -232,7 +249,7 @@ export default function SimpleModal({ open, setOpen }) {
       >
         Adicionar produto ao cardápio
       </Button>
-      <Modal open={open} onClose={handleClose} className={classes.modal} >
+      <Modal open={open} onClose={handleClose} className={classes.modal}>
         {body}
       </Modal>
     </div>

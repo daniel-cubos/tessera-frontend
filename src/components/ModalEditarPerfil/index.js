@@ -12,6 +12,8 @@ import useValidacaoForm from "../../hooks/useValidacaoForm";
 import profileImage from "../../assets/pizzaria.png";
 import { useEffect } from "react";
 import Select from "../Inputs/Select";
+import UploadImage from "../UploadImage";
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -77,6 +79,21 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "row",
   },
+  formulario: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  editarPerfil: {
+    display: "flex",
+    flexDirection: "row",
+    gap: "48px",
+  },
+  titulo: {
+    fontFamily: "'Baloo 2', cursive",
+    color: "hsla(14, 99%, 41%, 1)",
+    fontSize: "32px",
+    marginBottom: "40px",
+  },
 }));
 
 export default function SimpleModal({ open, setOpen }) {
@@ -91,6 +108,7 @@ export default function SimpleModal({ open, setOpen }) {
   const [valorMinPedido, setValorMinPedido] = useState();
   const [senha, setSenha] = useState();
   const [rptSenha, setRptSenha] = useState();
+  const [baseImage, setBaseImage] = useState("");
   const { register, handleSubmit } = useForm();
   const { put, get } = require("../../requisicoes");
   const { token } = useAuth();
@@ -185,7 +203,7 @@ export default function SimpleModal({ open, setOpen }) {
         });
         setAbrirMensagem(true);
         return;
-      };
+      }
 
       dadosAPI = {
         nome: data.nomeUsuario,
@@ -195,17 +213,17 @@ export default function SimpleModal({ open, setOpen }) {
           nome: data.nomeRestaurante,
           descricao: data.descricao,
           idCategoria: data.categoria,
-          taxaEntrega: (Number(data.taxaEntrega.replace(",", ".")) * 100),
+          taxaEntrega: Number(data.taxaEntrega.replace(",", ".")) * 100,
           tempoEntregaEmMinutos: Number(data.tempoEntrega),
           valorMinimoPedido:
             Number(data.valorMinPedido.replace(",", ".")) * 100,
-        }
-      }
+        },
+      };
     }
 
     try {
       const dados = await put("usuarios", dadosAPI, token);
-      
+
       const mensagem = await dados.json();
 
       if (dados.status === 200) {
@@ -240,90 +258,93 @@ export default function SimpleModal({ open, setOpen }) {
       className={classes.paper}
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className="FormEditarPerfil">
-        <h1>Editar Perfil</h1>
-        <label htmlFor="nomeUsuario">Nome de usuário</label>
-        <TextField
-          id="nomeUsuario"
-          type="text"
-          value={nomeUsuario}
-          setValue={setNomeUsuario}
-          register={register}
-        />
-        <label htmlFor="email">Email</label>
-        <TextField
-          id="email"
-          type="email"
-          value={email}
-          setValue={setEmail}
-          register={register}
-        />
-        <label htmlFor="nomeRestaurante">Nome do restaurante</label>
-        <TextField
-          id="nomeRestaurante"
-          type="text"
-          value={nomeRestaurante}
-          setValue={setNomeRestaurante}
-          register={register}
-        />
-        <label htmlFor="categoria">Categoria do restaurante</label>
-        <Select
-          id="categoria"
-          opcoes={opcoes}
-          value={categoria}
-          setValue={setCategoria}
-          register={register}
-        />
-        <label htmlFor="descricao">Descrição</label>
-        <TextField
-          type="text"
-          id="descricao"
-          multiline={true}
-          rows={2}
-          inputProps={{ maxLength: "50" }}
-          value={descricao}
-          setValue={setDescricao}
-          register={register}
-        />
-        <span className="avisoQtdCaracteres">Máx.: 50 caracteres</span>
-        <label htmlFor="taxaEntrega">Taxa de entrega</label>
-        <InputAmount
-          id="taxaEntrega"
-          value={taxaEntrega}
-          setValue={setTaxaEntrega}
-          register={register}
-          width="408px"
-        />
-        <label htmlFor="tempoEntrega">Tempo estimado de entrega</label>
-        <TextField
-          id="tempoEntrega"
-          type="text"
-          value={tempoEntrega}
-          setValue={setTempoEntrega}
-          register={register}
-        />
-        <label htmlFor="valorMinPedido">Valor mínimo do pedido</label>
-        <InputAmount
-          id="valorMinPedido"
-          value={valorMinPedido}
-          setValue={setValorMinPedido}
-          register={register}
-          width="408px"
-        />
-        <label htmlFor="senha">Senha</label>
-        <InputPassword
-          id="senha"
-          value={senha}
-          setValue={setSenha}
-          register={register}
-        />
-        <label htmlFor="rptSenha">Repita a senha</label>
-        <InputPassword
-          id="rptSenha"
-          value={rptSenha}
-          setValue={setRptSenha}
-          register={register}
-        />
+      <div className={classes.editarPerfil}>
+        <div className={classes.formulario}>
+          <h1 className={classes.titulo}>Editar Perfil</h1>
+          <label htmlFor="nomeUsuario">Nome de usuário</label>
+          <TextField
+            id="nomeUsuario"
+            type="text"
+            value={nomeUsuario}
+            setValue={setNomeUsuario}
+            register={register}
+          />
+          <label htmlFor="email">Email</label>
+          <TextField
+            id="email"
+            type="email"
+            value={email}
+            setValue={setEmail}
+            register={register}
+          />
+          <label htmlFor="nomeRestaurante">Nome do restaurante</label>
+          <TextField
+            id="nomeRestaurante"
+            type="text"
+            value={nomeRestaurante}
+            setValue={setNomeRestaurante}
+            register={register}
+          />
+          <label htmlFor="categoria">Categoria do restaurante</label>
+          <Select
+            id="categoria"
+            opcoes={opcoes}
+            value={categoria}
+            setValue={setCategoria}
+            register={register}
+          />
+          <label htmlFor="descricao">Descrição</label>
+          <TextField
+            type="text"
+            id="descricao"
+            multiline={true}
+            rows={2}
+            inputProps={{ maxLength: "50" }}
+            value={descricao}
+            setValue={setDescricao}
+            register={register}
+          />
+          <span className="avisoQtdCaracteres">Máx.: 50 caracteres</span>
+          <label htmlFor="taxaEntrega">Taxa de entrega</label>
+          <InputAmount
+            id="taxaEntrega"
+            value={taxaEntrega}
+            setValue={setTaxaEntrega}
+            register={register}
+            width="408px"
+          />
+          <label htmlFor="tempoEntrega">Tempo estimado de entrega</label>
+          <TextField
+            id="tempoEntrega"
+            type="text"
+            value={tempoEntrega}
+            setValue={setTempoEntrega}
+            register={register}
+          />
+          <label htmlFor="valorMinPedido">Valor mínimo do pedido</label>
+          <InputAmount
+            id="valorMinPedido"
+            value={valorMinPedido}
+            setValue={setValorMinPedido}
+            register={register}
+            width="408px"
+          />
+          <label htmlFor="senha">Senha</label>
+          <InputPassword
+            id="senha"
+            value={senha}
+            setValue={setSenha}
+            register={register}
+          />
+          <label htmlFor="rptSenha">Repita a senha</label>
+          <InputPassword
+            id="rptSenha"
+            value={rptSenha}
+            setValue={setRptSenha}
+            register={register}
+          />
+        </div>
+        <UploadImage baseImage={baseImage} setBaseImage={setBaseImage} register={register} />
       </div>
       <div className={classes.buttonsStepper}>
         <Button
