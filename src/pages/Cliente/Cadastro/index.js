@@ -17,7 +17,6 @@ import logobarril from '../../../assets/logo-barril.svg';
 import InputMask from 'react-input-mask';
 import { useHistory } from 'react-router-dom';
 
-const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const toastOpts = {
   position: 'top-right',
@@ -78,7 +77,7 @@ function Cadastro() {
     try {
       const { senhaConfirm, ...body } = data;
       body.telefone = telefone;
-      const response = await fetch(`${BASE_URL}/clientes`, {
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/cliente`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -92,7 +91,7 @@ function Cadastro() {
         return;
       }
       toast.success('Cadastro realizado com sucesso.', toastOpts);
-      history.push('/cliente/login');
+      history.push('/cliente');
     } catch (error) {
       console.log(error.message);
       toast.error('Ocorreu um erro ao cadastrar.', toastOpts);
@@ -234,7 +233,7 @@ function Cadastro() {
             </button>
             <LinkEntrarCadastrar
               texto='Já tem uma conta?'
-              destino='/cliente/login'
+              destino='/cliente'
               titulo='Login'
             />
           </div>
