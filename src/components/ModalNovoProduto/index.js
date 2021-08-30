@@ -122,6 +122,7 @@ export default function SimpleModal({ open, setOpen }) {
     localStorage.removeItem("descricaoProduto");
     setValor();
     localStorage.removeItem("valor");
+    setBaseImage("");
     setAbrirMensagem(false);
   };
 
@@ -132,7 +133,7 @@ export default function SimpleModal({ open, setOpen }) {
       preco: Math.round(Number(data.valor.replace(",", ".")) * 100),
       ativo: Boolean(data.ativarProduto),
       permiteObservacoes: Boolean(data.permiteObservacao),
-      imagemProduto: data.upload,
+      imagemProduto: data.uploadImagem,
     };
 
     try {
@@ -219,7 +220,7 @@ export default function SimpleModal({ open, setOpen }) {
             unregister={unregister}
           />
         </div>
-        <UploadImage baseImage={baseImage} setBaseImage={setBaseImage} register={register} />
+        <UploadImage baseImage={baseImage} setBaseImage={setBaseImage} register={register} id="uploadImagem" />
       </div>
       <div className={classes.buttonsStepper}>
         <Button

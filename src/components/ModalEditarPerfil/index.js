@@ -9,11 +9,10 @@ import InputPassword from "../Inputs/InputPassword";
 import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
 import useValidacaoForm from "../../hooks/useValidacaoForm";
-import profileImage from "../../assets/pizzaria.png";
 import { useEffect } from "react";
 import Select from "../Inputs/Select";
 import UploadImage from "../UploadImage";
-
+import emptyImage from "../../assets/emptyImage.svg"
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -146,6 +145,7 @@ export default function SimpleModal({ open, setOpen }) {
           ","
         )
       );
+      setBaseImage(infoUsuario.imagemRestaurante);
     } catch (error) {
       console.log(error.message);
     }
@@ -192,7 +192,8 @@ export default function SimpleModal({ open, setOpen }) {
           taxaEntrega: Number(data.taxaEntrega.replace(",", ".")) * 100,
           tempoEntregaEmMinutos: Number(data.tempoEntrega),
           valorMinimoPedido:
-            Number(data.valorMinPedido.replace(",", ".")) * 100,
+          Number(data.valorMinPedido.replace(",", ".")) * 100,
+          imagemRestaurante: data.uploadImagem,
         },
       };
     } else {
@@ -217,6 +218,7 @@ export default function SimpleModal({ open, setOpen }) {
           tempoEntregaEmMinutos: Number(data.tempoEntrega),
           valorMinimoPedido:
             Number(data.valorMinPedido.replace(",", ".")) * 100,
+          imagemRestaurante: data.uploadImagem,
         },
       };
     }
@@ -344,7 +346,12 @@ export default function SimpleModal({ open, setOpen }) {
             register={register}
           />
         </div>
-        <UploadImage baseImage={baseImage} setBaseImage={setBaseImage} register={register} />
+        <UploadImage
+          baseImage={baseImage}
+          setBaseImage={setBaseImage}
+          register={register}
+          id="uploadImagem"
+        />
       </div>
       <div className={classes.buttonsStepper}>
         <Button
@@ -367,7 +374,7 @@ export default function SimpleModal({ open, setOpen }) {
   return (
     <div style={{ overflow: "scroll" }}>
       <img
-        src={profileImage}
+        src={!baseImage ? emptyImage : baseImage}
         alt=""
         className="profileImage"
         onClick={handleOpen}

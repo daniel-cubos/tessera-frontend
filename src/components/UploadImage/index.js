@@ -1,7 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import UploadIcon from "../../assets/upload-icon.svg";
 import { makeStyles } from "@material-ui/core/styles";
-import { useEffect } from "react";
 
 const useStyles = makeStyles(() => ({
   label: {
@@ -39,7 +38,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-function UploadImage({ baseImage, setBaseImage, register }) {
+function UploadImage({ baseImage, setBaseImage, register, id }) {
   const uploadRef = useRef();
   const classes = useStyles();
 
@@ -76,13 +75,14 @@ function UploadImage({ baseImage, setBaseImage, register }) {
       className={classes.upload}
     >
       <input
-        {...register("upload", { value: baseImage })}
+        {...register(`${id}`, { value: baseImage })}
         ref={uploadRef}
         type="file"
         onChange={(e) => {
           uploadImage(e);
         }}
         className={classes.inputFile}
+        id={id}
       />
       <label className={classes.label} onClick={handleClick}>
         <img src={UploadIcon} alt="" />

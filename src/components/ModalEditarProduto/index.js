@@ -103,6 +103,7 @@ export default function SimpleModal({
   preco,
   ativo,
   permiteObservacoes,
+  urlImagem
 }) {
   const classes = useStyles();
   const [nomeProduto, setNomeProduto] = useState();
@@ -142,6 +143,7 @@ export default function SimpleModal({
     setValor(String((preco / 100).toFixed(2)).replace(".", ","));
     setAtivarProduto(Boolean(ativo));
     setPermiteObservacao(Boolean(permiteObservacoes));
+    setBaseImage(urlImagem);
     register("nomeProduto");
     register("descricaoProduto");
     register("valor");
@@ -159,6 +161,7 @@ export default function SimpleModal({
       preco: Math.round(Number(data.valor.replace(",", ".")) * 100),
       ativo: Boolean(data.ativarProduto),
       permiteObservacoes: Boolean(data.permiteObservacao),
+      imagemProduto: data.uploadImagem
     };
 
     try {
@@ -245,7 +248,7 @@ export default function SimpleModal({
             unregister={unregister}
           />
         </div>
-        <UploadImage baseImage={baseImage} setBaseImage={setBaseImage} register={register} />
+        <UploadImage baseImage={baseImage} setBaseImage={setBaseImage} register={register} id="uploadImagem" />
       </div>
       <div className={classes.buttonsStepper}>
         <Button

@@ -117,6 +117,7 @@ function Dashboard() {
               id={produto.id}
               ativo={produto.ativo}
               permiteObservacoes={produto.permite_observacoes}
+              urlImagem={produto.img_produto}
               open={abrirModalEditProd}
               setOpen={setAbrirModalEditProd}
               key={produto.id}

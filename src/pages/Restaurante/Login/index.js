@@ -55,7 +55,6 @@ function Login() {
         return;
       }
       const dados = await response.json();
-      console.log(dados);
       logar(dados.token, () => history.push('/produtos'));
     } catch (error) {
       setLoading(false);
