@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import "./style.css";
 import { Link, useHistory } from "react-router-dom";
-import Ilustracao from "../../assets/illustration.svg";
-import Steppers from "../../components/Steppers";
-import FormPasso1 from "../../components/FormsPassosCadastro/FormPasso1";
-import FormPasso2 from "../../components/FormsPassosCadastro/FormPasso2";
-import FormPasso3 from "../../components/FormsPassosCadastro/FormPasso3";
-import Snackbar from "../../components/Snackbar";
+import Ilustracao from "../../../assets/illustration.svg";
+import Steppers from "../../../components/Steppers";
+import FormPasso1 from "../../../components/FormsPassosCadastro/FormPasso1";
+import FormPasso2 from "../../../components/FormsPassosCadastro/FormPasso2";
+import FormPasso3 from "../../../components/FormsPassosCadastro/FormPasso3";
+import Snackbar from "../../../components/Snackbar";
 import { useForm } from "react-hook-form";
-import useValidacaoForm from "../../hooks/useValidacaoForm";
+import useValidacaoForm from "../../../hooks/useValidacaoForm";
 
 function Cadastro() {
   const { handleSubmit, register } = useForm();
@@ -23,7 +23,7 @@ function Cadastro() {
 
   const formsPassos = [passo1, passo2, passo3];
 
-  const { post } = require("../../requisicoes");
+  const { post } = require("../../../requisicoes");
 
   const onSubmit = async (data) => {
     setCarregando(true);

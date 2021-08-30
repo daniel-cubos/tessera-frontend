@@ -6,9 +6,9 @@ import {
 } from "react-router-dom";
 import React from "react";
 
-import Login from "./pages/Login";
-import Cadastro from "./pages/Cadastro";
-import Dashboard from "./pages/Produtos";
+import Login from "./pages/Restaurante/Login";
+import Cadastro from "./pages/Restaurante/Cadastro";
+import Dashboard from "./pages/Restaurante/Produtos";
 
 import LoginCliente from "./pages/Cliente/Login";
 import CadastroCliente from "./pages/Cliente/Cadastro";

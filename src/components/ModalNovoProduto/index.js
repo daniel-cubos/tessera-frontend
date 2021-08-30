@@ -10,17 +10,6 @@ import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
 import useValidacaoForm from "../../hooks/useValidacaoForm";
 
-function getModalStyle() {
-  const top = 50;
-  const left = 50;
-
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
-  };
-}
-
 const useStyles = makeStyles((theme) => ({
   paper: {
     position: "absolute",
@@ -31,6 +20,12 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: "0px 4px 16px rgba(50, 50, 50, 0.4)",
     display: "flex",
     flexDirection: "column",
+    top: "500px",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+  },
+  modal: {
+    overflow: "scroll",
   },
   contained: {
     marginRight: theme.spacing(1),
@@ -83,7 +78,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SimpleModal({ open, setOpen }) {
   const classes = useStyles();
-  const [modalStyle] = useState(getModalStyle());
   const [nomeProduto, setNomeProduto] = useState();
   const [descricaoProduto, setDescricaoProduto] = useState();
   const [valor, setValor] = useState();
@@ -160,7 +154,6 @@ export default function SimpleModal({ open, setOpen }) {
   
   const body = (
     <form
-    style={modalStyle}
     className={classes.paper}
     onSubmit={handleSubmit(onSubmit)}
     >
@@ -239,7 +232,7 @@ export default function SimpleModal({ open, setOpen }) {
       >
         Adicionar produto ao cardápio
       </Button>
-      <Modal open={open} onClose={handleClose}>
+      <Modal open={open} onClose={handleClose} className={classes.modal} >
         {body}
       </Modal>
     </div>

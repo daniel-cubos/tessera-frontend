@@ -8,7 +8,6 @@
 }
 
 .Dashboard {
-  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -80,7 +79,7 @@ button.logout {
   z-index: 2;
 }
 
-.FormNovoProduto h1, .FormEditarProduto h1  {
+.FormNovoProduto h1, .FormEditarProduto h1, .FormEditarPerfil h1 {
   font-family: var(--baloo);
   color: hsla(14, 99%, 41%, 1);
   font-size: 32px;
