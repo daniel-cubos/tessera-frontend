@@ -23,7 +23,7 @@ import useAuth from "./hooks/useAuth";
 function RotasProtegidas(props) {
   const { token } = useAuth();
   return (
-    <Route render={() => (token ? props.children : <Redirect to="/" />)} />
+    <Route render={() => (props.children)} />
   );
 }
 
@@ -35,8 +35,9 @@ function Routes() {
           <ValidacaoFormProvider>
             <Route path="/" exact component={Login} />
             <Route path="/cadastro" component={Cadastro} />
-            <Route path="/cliente" component={LoginCliente} />
             <Route path="/cliente/cadastro" component={CadastroCliente} />
+            <Route path="/cliente" exact component={LoginCliente} />
+
             <RotasProtegidas>
               <Route path="/pedidos" component={Pedidos} />
               <Route path="/produtos" component={Dashboard} />
