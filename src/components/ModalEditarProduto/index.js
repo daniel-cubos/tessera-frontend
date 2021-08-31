@@ -155,14 +155,17 @@ export default function SimpleModal({
     if (data.nomeProduto === "" || !data.nomeProduto) return;
     if (data.valor === "" || !data.valor) return;
 
-    const dadosAPI = {
+    let dadosAPI = {
       nome: data.nomeProduto,
       descricao: data.descricaoProduto,
       preco: Math.round(Number(data.valor.replace(",", ".")) * 100),
       ativo: Boolean(data.ativarProduto),
       permiteObservacoes: Boolean(data.permiteObservacao),
-      imagemProduto: data.uploadImagem
     };
+
+    if (data.uploadImagem.includes("base64")) {
+      dadosAPI = {...dadosAPI, imagemProduto: data.uploadImagem };
+    }
 
     try {
       const dados = await put(`produtos/${id}`, dadosAPI, token);

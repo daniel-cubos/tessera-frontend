@@ -6,10 +6,10 @@ import {
 } from "react-router-dom";
 import React from "react";
 
-import Login from "./pages/Login";
+import Login from "./pages/Restaurante/Login";
 import Pedidos from "./pages/Pedidos";
-import Cadastro from "./pages/Cadastro";
-import Dashboard from "./pages/Produtos";
+import Cadastro from "./pages/Restaurante/Cadastro";
+import Dashboard from "./pages/Restaurante/Produtos";
 
 import LoginCliente from "./pages/Cliente/Login";
 import CadastroCliente from "./pages/Cliente/Cadastro";
