@@ -193,7 +193,6 @@ export default function SimpleModal({ open, setOpen }) {
           tempoEntregaEmMinutos: Number(data.tempoEntrega),
           valorMinimoPedido:
           Number(data.valorMinPedido.replace(",", ".")) * 100,
-          imagemRestaurante: data.uploadImagem,
         },
       };
     } else {
@@ -218,11 +217,14 @@ export default function SimpleModal({ open, setOpen }) {
           tempoEntregaEmMinutos: Number(data.tempoEntrega),
           valorMinimoPedido:
             Number(data.valorMinPedido.replace(",", ".")) * 100,
-          imagemRestaurante: data.uploadImagem,
         },
       };
     }
 
+    if (data.uploadImagem.includes("base64")) {
+      dadosAPI.restaurante = {...dadosAPI.restaurante, imagemRestaurante: data.uploadImagem}
+    }
+    
     try {
       const dados = await put("usuarios", dadosAPI, token);
 
