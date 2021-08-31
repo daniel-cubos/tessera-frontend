@@ -4,43 +4,33 @@ import profileImg from '../../../assets/profile.svg';
 import useStyles from './style';
 import Header from '../../../components/HeaderCliente';
 import { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import useAuth from '../../../hooks/useAuth';
 import CardRestaurante from '../../../components/CardRestaurante';
-import { Message } from '@material-ui/icons';
+
+const { get } = require("../../../requisicoes");
 
 function RestauranteCliente() {
   const classes = useStyles();
-  const { token, deslogar } = useAuth();
+  const { token } = useAuth();
   const [restaurantes, setRestaurantes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [busca, setBusca] = useState('');
   const [restaurantesFiltrados, setRestaurantesFiltrados] = useState([]);
-  const history = useHistory();
 
 
-
-  const handleLogout = () => {
-    deslogar(history.push('/cliente'));
-  };
 
   useEffect(() => {
     const buscarRestaurantes = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`${process.env.REACT_APP_BASE_URL}/restaurante`, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (!response.ok) {
+        const resposta = await get("restaurante", token);
+        if (!resposta) {
           Error('Erro ao buscar restaurantes.');
           setLoading(false);
           return;
         }
-        const dados = await response.json();
+        const dados = await resposta.json();
         setRestaurantes(dados);
       } catch (error) {
         Error('Erro ao buscar restaurantes.');
