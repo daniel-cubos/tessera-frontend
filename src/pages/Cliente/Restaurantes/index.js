@@ -79,7 +79,7 @@ function RestauranteCliente() {
               titulo={item.nome}
               descricao={item.descricao}
               preco={item.valor_minimo_pedido}
-              imagem={item.imagem}
+              imagem={item.img_restaurante}
               id={item.id}
             />
           ))}

@@ -43,14 +43,14 @@ function Dashboard() {
     try {
       const resposta = await get("usuarios", token);
       const dados = await resposta.json();
-  
+
       const { nomeRestaurante, categoriaRestaurante } = dados;
       try {
         const resposta = await get(`categoria/${categoriaRestaurante}`);
         const categoria = await resposta.json();
-    
+
         const infoCategoria = categoria[0];
-  
+        console.log(infoCategoria.img_categoria);
         setInfoRestaurante({
           nome: nomeRestaurante,
           imgCategoria: infoCategoria.img_categoria,
