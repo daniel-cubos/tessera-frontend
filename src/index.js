@@ -4,8 +4,8 @@ import Rotas from './rotas';
 import './index.css';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Rotas />
-  </React.StrictMode>,
-  document.getElementById('root')
+	<React.StrictMode>
+		<Rotas />
+	</React.StrictMode>,
+	document.getElementById('root')
 );
