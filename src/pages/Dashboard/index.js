@@ -1,81 +1,38 @@
-import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
 import "./style.css";
 import { get } from '../../requisicoes';
+import Ilustracao from "../../assets/illustration-2.svg";
 
 import useAuth from "../../hooks/useAuth";
 import useValidacaoForm from "../../hooks/useValidacaoForm";
 
 import Snackbars from "../../components/Elements/Snackbar";
-import CardPedido from "../../components/Pedido/CardPedido";
+import CardProduto from "../../components/Produto/CardProduto";
+import ModalNovoProduto from "../../components/Produto/ModalNovoProduto";
+import ModalEditarPerfil from "../../components/Usuario/ModalEditarPerfil";
 
-import profileImage from "../../assets/pizzaria.png";
-import Ilustracao from "../../assets/illustration-2.svg";
-
-import { Button } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-
-
-const useStyles = makeStyles((theme) => ({
-	contained: {
-		marginRight: theme.spacing(1),
-		borderRadius: "20px",
-		boxShadow: "none",
-		height: "40px",
-		fontFamily: "'Montserrat', sans-serif",
-		fontWeight: "600",
-		fontSize: "14px",
-		color: "hsla(0, 0%, 100%, 1)",
-		backgroundColor: "hsla(14, 99%, 41%, 1)",
-		paddingLeft: "40px",
-		paddingRight: "40px",
-		"&:hover": {
-			backgroundColor: "hsla(14, 84%, 36%, 1)",
-			boxShadow: "none",
-		},
-		"&:disabled": {
-			backgroundColor: "hsla(218, 8%, 80%, 1)",
-			color: "hsla(210, 3%, 45%, 1)",
-		},
-	},
-	button: {
-		marginRight: theme.spacing(1),
-		borderRadius: "20px",
-		textTransform: "none",
-		boxShadow: "none",
-		height: "40px",
-		fontFamily: "'Montserrat', sans-serif",
-		fontWeight: "600",
-		fontSize: "14px",
-	},
-}));
-
-function Pedidos() {
-	const classes = useStyles();
+function Dashboard() {
 	const history = useHistory();
-
 	const { deslogar, token } = useAuth();
 	const { setAbrirMensagem } = useValidacaoForm();
+
 	const [qtdProdutos, setQtdProdutos] = useState(0);
 	const [recarregar, setRecarregar] = useState(false);
 	const [infoRestaurante, setInfoRestaurante] = useState({});
 	const [produtosCadastrados, setProdutosCadastrados] = useState();
 	const [abrirModalNovoProd, setAbrirModalNovoProd] = useState(false);
 	const [abrirModalEditProd, setAbrirModalEditProd] = useState(false);
+	const [abrirModalEditPerfil, setAbrirModalEditPerfil] = useState(false);
 
 	const redirLogin = () => {
 		history.push("/");
 	};
 
-	const redirCardapio = () => {
-		history.push("/produtos");
-	};
-
-	const listagemPedido = async () => {
+	const buscarProdutos = async () => {
 		try {
-			const resposta = await get("pedidos", token);
+			const resposta = await get("produtos", token);
 			const dados = await resposta.json();
 			if (JSON.stringify(dados) === JSON.stringify(produtosCadastrados)) return;
 			setProdutosCadastrados(dados);
@@ -96,7 +53,7 @@ function Pedidos() {
 				const categoria = await resposta.json();
 
 				const infoCategoria = categoria[0];
-
+				console.log(infoCategoria.img_categoria);
 				setInfoRestaurante({
 					nome: nomeRestaurante,
 					imgCategoria: infoCategoria.img_categoria,
@@ -110,11 +67,11 @@ function Pedidos() {
 	}
 
 	useEffect(() => {
-		listagemPedido();
 		infosRestaurante();
+		buscarProdutos();
 		setRecarregar(false);
 		setAbrirMensagem(false);
-	}, [abrirModalNovoProd, abrirModalEditProd, recarregar]);
+	}, [abrirModalNovoProd, abrirModalEditProd, abrirModalEditPerfil, recarregar]);
 
 	return (
 		<div className="Dashboard">
@@ -127,7 +84,7 @@ function Pedidos() {
 					backgroundPosition: "center",
 				}}
 			>
-				<img src={profileImage} alt="" className="profileImage" />
+				<ModalEditarPerfil open={abrirModalEditPerfil} setOpen={setAbrirModalEditPerfil} />
 				<div className="cabecalho">
 					<h1>{infoRestaurante.nome}</h1>
 					<button className="logout" onClick={() => deslogar(redirLogin)}>
@@ -139,29 +96,31 @@ function Pedidos() {
 			{qtdProdutos === 0 ? (
 				<div className="dashboardSemProdutos">
 					<p>
-						Você ainda não tem nenhum pedido pendente
+						Você ainda não tem nenhum produto no seu cardápio. <br />
+						Gostaria de adicionar um novo produto?
 					</p>
+					<ModalNovoProduto
+						open={abrirModalNovoProd}
+						setOpen={setAbrirModalNovoProd}
+					/>
 					<Snackbars />
 				</div>
 			) : (
 				<div className="produtos">
 					<div></div>
-					<Button
-						type="button"
-						variant="contained"
-						onClick={redirCardapio}
-						className={clsx(classes.button, classes.contained)}
-					>
-						Cardápio do Restaurante
-					</Button>
+					<ModalNovoProduto
+						open={abrirModalNovoProd}
+						setOpen={setAbrirModalNovoProd}
+					/>
 					{produtosCadastrados.map((produto) => (
-						<CardPedido
-							idPedido={produto.idPedido}
+						<CardProduto
 							nome={produto.nome}
-							totalPedido={produto.totalPedido}
-							cep={produto.cep}
-							endereco={produto.endereco}
-							carrinho={produto.carrinho}
+							descricao={produto.descricao}
+							preco={produto.preco}
+							id={produto.id}
+							ativo={produto.ativo}
+							permiteObservacoes={produto.permite_observacoes}
+							urlImagem={produto.img_produto}
 							open={abrirModalEditProd}
 							setOpen={setAbrirModalEditProd}
 							key={produto.id}
@@ -174,4 +133,4 @@ function Pedidos() {
 	);
 }
 
-export default Pedidos;
+export default Dashboard;
